@@ -35,18 +35,15 @@
     background: var(--panel);
     border-radius: 22px;
     border: 1px solid var(--border);
-    box-shadow:
-      0 10px 25px rgba(0,0,0,0.07),
-      0 2px 5px rgba(0,0,0,0.04);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.07),
+                0 2px 5px rgba(0,0,0,0.04);
     display: grid;
     grid-template-columns: minmax(0, 3fr);
     overflow: hidden;
   }
 
-  @media (min-width: 900px) {
-    .app {
-      grid-template-columns: minmax(0, 3fr) minmax(260px, 1.5fr);
-    }
+  @media (min-width:900px){
+    .app{ grid-template-columns:minmax(0,3fr) minmax(260px,1.5fr);}
   }
 
   .chat-panel {
@@ -74,16 +71,11 @@
     justify-content: center;
     color: white;
     font-weight: 900;
-    letter-spacing: 0.04em;
     font-size: 15px;
-    box-shadow: 0 3px 8px rgba(160, 0, 0, 0.25);
+    box-shadow: 0 3px 8px rgba(160,0,0,0.25);
   }
 
-  .title {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--ku-red);
-  }
+  .title {font-size: 18px;font-weight:700;color:var(--ku-red);}
 
   .chat {
     flex: 1;
@@ -95,69 +87,67 @@
     background: #fafafb;
   }
 
-  .bubble-row { display: flex; }
-  .bubble-row.user { justify-content: flex-end; }
+  .bubble-row {display:flex;}
+  .bubble-row.user{justify-content:flex-end;}
 
   .bubble {
     max-width: 75%;
-    border-radius: 14px;
-    padding: 11px 14px;
-    white-space: pre-wrap;
-    font-size: 14px;
-    line-height: 1.4;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border-radius:14px;
+    padding:11px 14px;
+    white-space:pre-wrap;
+    font-size:14px;
+    line-height:1.4;
+    box-shadow:0 1px 3px rgba(0,0,0,0.05);
   }
 
   .bubble.bot {
-    background: #ffffff;
-    border: 1px solid var(--border);
+    background:#ffffff;
+    border:1px solid var(--border);
   }
 
   .bubble.user {
-    background: var(--ku-red-light);
-    color: #fff;
-  }
-
-  .meta {
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-top: 3px;
+    background:var(--ku-red-light);
+    color:#fff;
   }
 
   .input-panel {
-    border-top: 1px solid var(--border);
-    padding: 16px;
-    background: #ffffff;
+    border-top:1px solid var(--border);
+    padding:16px;
+    background:#ffffff;
   }
 
   .input-row {
-    display: flex;
-    gap: 10px;
+    display:flex;
+    gap:10px;
   }
 
   .input-row input {
-    flex: 1;
-    padding: 10px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    font-size: 14px;
-    background: #fff;
-    color: #111827;
+    flex:1;
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:#fff;
+    font-size:14px;
   }
 
   .btn {
-    padding: 10px 18px;
-    border-radius: 999px;
-    background: var(--ku-red);
-    color: #fff;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
+    padding:10px 18px;
+    border-radius:999px;
+    background:var(--ku-red);
+    color:#fff;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
   }
 
-  .info-panel { background: var(--panel-soft); padding: 18px; }
+  .info-panel {
+    background:var(--panel-soft);
+    padding:18px;
+    font-size:14px;
+  }
   </style>
 </head>
+
 <body>
   <div class="app">
     <div class="chat-panel">
@@ -172,333 +162,77 @@
         <div class="bubble-row bot">
           <div class="bubble bot">
             Hi! 👋 I’m your KU campus guide.<br><br>
-            You can ask things like:<br>
-            - <code>141</code><br>
-            - <code>Central Plaza</code><br>
-            - <code>중앙도서관 어디 있어?</code><br>
-            - <code>Where is Hana Square?</code>
+            Try asking:<br>
+            • <code>141</code><br>
+            • <code>Central Plaza</code><br>
+            • <code>중앙도서관 어디 있어?</code><br>
+            • <code>Where is Hana Square?</code>
           </div>
         </div>
       </div>
 
       <div class="input-panel">
         <form id="form" class="input-row">
-          <input id="input" autocomplete="off" placeholder="Ask about a KU building…" />
+          <input id="input" autocomplete="off"
+                 placeholder="Ask about a KU building…" />
           <button type="submit" class="btn">Send</button>
         </form>
       </div>
     </div>
 
     <aside class="info-panel">
-      <div>
-        KU Building Finder — Powered by FastAPI & OpenAI
-      </div>
+      KU Building Finder — Powered by FastAPI & OpenAI
     </aside>
   </div>
 
   <script>
     const chatEl = document.getElementById("chat");
-    const formEl = document.getElementById("form");
-    const inputEl = document.getElementById("input");
-    const buttonEl = formEl.querySelector("button");
+    const form = document.getElementById("form");
+    const input = document.getElementById("input");
+    const button = form.querySelector("button");
 
     const API_URL = "https://ku-building-finder-backend-1.onrender.com/chat";
 
-    function addMessage(role, text) {
-      const row = document.createElement("div");
-      row.className = "bubble-row " + (role === "user" ? "user" : "bot");
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble " + (role === "user" ? "user" : "bot");
-      bubble.textContent = text;
-
+    function addMessage(role,text){
+      const row=document.createElement("div");
+      row.className="bubble-row "+(role==="user"?"user":"bot");
+      const bubble=document.createElement("div");
+      bubble.className="bubble "+(role==="user"?"user":"bot");
+      bubble.textContent=text;
       row.appendChild(bubble);
       chatEl.appendChild(row);
-      chatEl.scrollTop = chatEl.scrollHeight;
+      chatEl.scrollTop=chatEl.scrollHeight;
     }
 
-    formEl.addEventListener("submit", async (e) => {
+    form.addEventListener("submit",async(e)=>{
       e.preventDefault();
-      const text = inputEl.value.trim();
-      if (!text) return;
+      const text=input.value.trim();
+      if(!text)return;
 
-      addMessage("user", text);
-      inputEl.value = "";
-      inputEl.focus();
-      buttonEl.disabled = true;
+      addMessage("user",text);
+      input.value="";
+      input.focus();
+      button.disabled=true;
 
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text }),
+      try{
+        const res= await fetch(API_URL,{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({message:text})
         });
-
-        if (!res.ok) {
-          addMessage("bot", "Sorry, something went wrong.");
+        if(!res.ok){
+          addMessage("bot","Server error.");
         } else {
-          const data = await res.json();
-          addMessage("bot", data.reply);
+          const data=await res.json();
+          addMessage("bot",data.reply);
         }
-      } catch (err) {
-        console.error(err);
-        addMessage("bot", "Network error. Is the backend server running?");
+      } catch(err){
+        addMessage("bot","Network error.");
       } finally {
-        buttonEl.disabled = false;
+        button.disabled=false;
       }
     });
   </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>KU Campus Building Finder</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-  :root {
-    --ku-red: #a00000;
-    --ku-red-light: #d64646;
-    --bg: #f3f4f6;
-    --panel: #ffffff;
-    --panel-soft: #fafafa;
-    --border: #e5e7eb;
-    --text-main: #1f2937;
-    --text-muted: #6b7280;
-  }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 18px;
-    background: var(--bg);
-    color: var(--text-main);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  }
-
-  .app {
-    width: 100%;
-    max-width: 1024px;
-    background: var(--panel);
-    border-radius: 22px;
-    border: 1px solid var(--border);
-    box-shadow:
-      0 10px 25px rgba(0,0,0,0.07),
-      0 2px 5px rgba(0,0,0,0.04);
-    display: grid;
-    grid-template-columns: minmax(0, 3fr);
-    overflow: hidden;
-  }
-
-  @media (min-width: 900px) {
-    .app {
-      grid-template-columns: minmax(0, 3fr) minmax(260px, 1.5fr);
-    }
-  }
-
-  .chat-panel {
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid var(--border);
-  }
-
-  .header {
-    padding: 18px 22px;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-    background: #ffffff;
-  }
-
-  .logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background: var(--ku-red);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 900;
-    letter-spacing: 0.04em;
-    font-size: 15px;
-    box-shadow: 0 3px 8px rgba(160, 0, 0, 0.25);
-  }
-
-  .title {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--ku-red);
-  }
-
-  .chat {
-    flex: 1;
-    padding: 18px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    overflow-y: auto;
-    background: #fafafb;
-  }
-
-  .bubble-row { display: flex; }
-  .bubble-row.user { justify-content: flex-end; }
-
-  .bubble {
-    max-width: 75%;
-    border-radius: 14px;
-    padding: 11px 14px;
-    white-space: pre-wrap;
-    font-size: 14px;
-    line-height: 1.4;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-
-  .bubble.bot {
-    background: #ffffff;
-    border: 1px solid var(--border);
-  }
-
-  .bubble.user {
-    background: var(--ku-red-light);
-    color: #fff;
-  }
-
-  .meta {
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-top: 3px;
-  }
-
-  .input-panel {
-    border-top: 1px solid var(--border);
-    padding: 16px;
-    background: #ffffff;
-  }
-
-  .input-row {
-    display: flex;
-    gap: 10px;
-  }
-
-  .input-row input {
-    flex: 1;
-    padding: 10px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    font-size: 14px;
-    background: #fff;
-    color: #111827;
-  }
-
-  .btn {
-    padding: 10px 18px;
-    border-radius: 999px;
-    background: var(--ku-red);
-    color: #fff;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .info-panel { background: var(--panel-soft); padding: 18px; }
-  </style>
-</head>
-<body>
-  <div class="app">
-    <div class="chat-panel">
-      <div class="header">
-        <div class="logo">KU</div>
-        <div class="header-main">
-          <div class="title">Campus Building Finder</div>
-        </div>
-      </div>
-
-      <div id="chat" class="chat">
-        <div class="bubble-row bot">
-          <div class="bubble bot">
-            Hi! 👋 I’m your KU campus guide.<br><br>
-            You can ask things like:<br>
-            - <code>141</code><br>
-            - <code>Central Plaza</code><br>
-            - <code>중앙도서관 어디 있어?</code><br>
-            - <code>Where is Hana Square?</code>
-          </div>
-        </div>
-      </div>
-
-      <div class="input-panel">
-        <form id="form" class="input-row">
-          <input id="input" autocomplete="off" placeholder="Ask about a KU building…" />
-          <button type="submit" class="btn">Send</button>
-        </form>
-      </div>
-    </div>
-
-    <aside class="info-panel">
-      <div>
-        KU Building Finder — Powered by FastAPI & OpenAI
-      </div>
-    </aside>
-  </div>
-
-  <script>
-    const chatEl = document.getElementById("chat");
-    const formEl = document.getElementById("form");
-    const inputEl = document.getElementById("input");
-    const buttonEl = formEl.querySelector("button");
-
-    const API_URL = "https://ku-building-finder-backend-1.onrender.com/chat";
-
-    function addMessage(role, text) {
-      const row = document.createElement("div");
-      row.className = "bubble-row " + (role === "user" ? "user" : "bot");
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble " + (role === "user" ? "user" : "bot");
-      bubble.textContent = text;
-
-      row.appendChild(bubble);
-      chatEl.appendChild(row);
-      chatEl.scrollTop = chatEl.scrollHeight;
-    }
-
-    formEl.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const text = inputEl.value.trim();
-      if (!text) return;
-
-      addMessage("user", text);
-      inputEl.value = "";
-      inputEl.focus();
-      buttonEl.disabled = true;
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text }),
-        });
-
-        if (!res.ok) {
-          addMessage("bot", "Sorry, something went wrong.");
-        } else {
-          const data = await res.json();
-          addMessage("bot", data.reply);
-        }
-      } catch (err) {
-        console.error(err);
-        addMessage("bot", "Network error. Is the backend server running?");
-      } finally {
-        buttonEl.disabled = false;
-      }
-    });
-  </script>
 </body>
 </html>
