@@ -217,6 +217,7 @@
       try{
         const res= await fetch(API_URL,{
           method:"POST",
+          mode: "cors",
           headers:{"Content-Type":"application/json"},
           body:JSON.stringify({message:text})
         });
@@ -236,6 +237,7 @@
 
 </body>
 </html>
+
 
 
 
