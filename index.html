@@ -16,9 +16,6 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ===============================
-       🔥 배경: 고려대 본관
-    =============================== */
     body {
       min-height: 100vh;
       display: flex;
@@ -36,7 +33,6 @@
       color: var(--text-main);
     }
 
-    /* 어두운 오버레이 */
     body::before {
       content: "";
       position: fixed;
@@ -45,30 +41,23 @@
       z-index: -1;
     }
 
-    /* ===============================
-       App Container (Glass Card)
-    =============================== */
     .app {
       width: 100%;
       max-width: 1024px;
       display: grid;
       grid-template-columns: 1fr;
-      overflow: hidden;
-
       background: rgba(255, 255, 255, 0.93);
       backdrop-filter: blur(12px);
       border-radius: 22px;
       border: 1px solid var(--border);
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      overflow: hidden;
     }
 
     @media (min-width: 900px) {
       .app { grid-template-columns: 3fr 1.4fr; }
     }
 
-    /* ===============================
-       Chat Panel
-    =============================== */
     .chat-panel {
       display: flex;
       flex-direction: column;
@@ -94,7 +83,6 @@
       justify-content: center;
       color: #fff;
       font-weight: 900;
-      box-shadow: 0 3px 8px rgba(139,0,0,0,0.35);
     }
 
     .title {
@@ -106,7 +94,6 @@
     .subtitle {
       font-size: 12px;
       color: var(--text-muted);
-      margin-top: 2px;
     }
 
     .chat {
@@ -128,7 +115,6 @@
       padding: 12px 14px;
       font-size: 14px;
       line-height: 1.45;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       white-space: pre-wrap;
     }
 
@@ -137,39 +123,13 @@
       border: 1px solid var(--border);
     }
 
-    .bubble.bot::before {
-      content: "🏫 ";
-    }
+    .bubble.bot::before { content: "🏫 "; }
 
     .bubble.user {
       background: var(--ku-red);
       color: #fff;
     }
 
-    /* 링크 스타일 */
-    .bubble.bot a {
-      color: var(--ku-red);
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .bubble.bot a:hover {
-      text-decoration: underline;
-    }
-
-    .link-btn {
-      display: inline-block;
-      margin-top: 6px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: var(--ku-red);
-      color: #fff !important;
-      font-size: 13px;
-    }
-
-    /* ===============================
-       Input Panel
-    =============================== */
     .input-panel {
       border-top: 1px solid var(--border);
       padding: 16px;
@@ -199,33 +159,16 @@
       font-weight: 600;
     }
 
-    /* ===============================
-       Info Panel
-    =============================== */
     .info-panel {
       background: var(--panel-soft);
       padding: 18px;
       font-size: 14px;
-    }
-
-    .info-panel h3 {
-      margin-bottom: 10px;
-    }
-
-    .info-panel ul {
-      padding-left: 18px;
-      color: var(--text-muted);
-    }
-
-    .info-panel small {
-      color: var(--text-muted);
     }
   </style>
 </head>
 
 <body>
   <div class="app">
-
     <div class="chat-panel">
       <div class="header">
         <div class="logo">KU</div>
@@ -238,14 +181,12 @@
       <div id="chat" class="chat">
         <div class="bubble-row bot">
           <div class="bubble bot">
-안녕하세요 👋
+안녕하세요 👋  
 고려대학교 캠퍼스 건물 안내 챗봇입니다.
 
-건물 번호나 이름을 입력해 주세요.
-
 예시:
-• 141번 건물 어디야?
-• 중앙도서관 위치 알려줘
+• 중앙도서관 위치 알려줘  
+• 141번 건물 어디야  
 • Where is Hana Square?
           </div>
         </div>
@@ -254,23 +195,19 @@
       <div class="input-panel">
         <form id="form" class="input-row">
           <input id="input" autocomplete="off"
-            placeholder="건물 번호 또는 이름 입력 (예: 141, 중앙도서관)" />
+            placeholder="건물 이름 또는 번호 입력" />
           <button type="submit" class="btn">검색</button>
         </form>
       </div>
     </div>
 
     <aside class="info-panel">
-      <h3>📍 캠퍼스 이용 안내</h3>
+      <strong>📍 이용 안내</strong>
       <ul>
-        <li>건물 번호 / 이름 검색</li>
-        <li>한국어 · English 지원</li>
-        <li>지도 링크 제공</li>
+        <li>다국어 지원</li>
+        <li>네이버 지도 링크 제공</li>
       </ul>
-      <hr style="margin:12px 0">
-      <small>Made By Team DJ (LSAI)</small>
     </aside>
-
   </div>
 
   <script>
@@ -289,7 +226,7 @@
       bubble.className = "bubble " + (role === "user" ? "user" : "bot");
 
       if (role === "bot") {
-        bubble.innerHTML = text;   // 🔥 링크 렌더링
+        bubble.innerHTML = text;
       } else {
         bubble.textContent = text;
       }
@@ -315,9 +252,17 @@
           body: JSON.stringify({ message: text })
         });
 
-        const data = await res.json();
-        addMessage("bot", data.reply);
-      } catch {
+        const raw = await res.text();
+        console.log("RAW RESPONSE:", raw);
+
+        try {
+          const data = JSON.parse(raw);
+          addMessage("bot", data.reply ?? "응답 형식 오류");
+        } catch {
+          addMessage("bot", "서버 응답을 해석할 수 없습니다.");
+        }
+
+      } catch (err) {
         addMessage("bot", "네트워크 오류가 발생했습니다.");
       } finally {
         button.disabled = false;
@@ -326,7 +271,4 @@
   </script>
 </body>
 </html>
-
-
-
 
