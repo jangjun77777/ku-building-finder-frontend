@@ -6,61 +6,255 @@
 <title>KU ISC Campus Assistant</title>
 <style>
 :root{
- --ku-red:#8B0000;--bg:#f6f7f9;--border:#e5e7eb;--text:#1f2937;--muted:#6b7280;
+ --ku-red:#8B0000;
+ --bg:#f6f7f9;
+ --border:#e5e7eb;
+ --text:#1f2937;
+ --muted:#6b7280;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{
  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
- min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;
+ min-height:100vh;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ padding:20px;
  background:url("./ku-mainhall-bg.jpeg") center/cover fixed no-repeat;
 }
-body:before{content:"";position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:-1}
+body:before{
+ content:"";
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.35);
+ z-index:-1;
+}
 .app{
- width:100%;max-width:1200px;height:90vh;
- display:grid;grid-template-columns:2.8fr 1.2fr;
+ width:100%;
+ max-width:1200px;
+ height:90vh;
+ display:grid;
+ grid-template-columns:2.8fr 1.2fr;
  background:rgba(255,255,255,.94);
  backdrop-filter:blur(10px);
- border-radius:22px;overflow:hidden;
- box-shadow:0 15px 40px rgba(0,0,0,.18)
+ border-radius:22px;
+ overflow:hidden;
+ box-shadow:0 15px 40px rgba(0,0,0,.18);
 }
 .chat-panel{display:flex;flex-direction:column}
-.header{display:flex;align-items:center;gap:15px;padding:18px 22px;background:#fff;border-bottom:1px solid var(--border)}
-.logo{width:48px;height:48px;border-radius:50%;background:var(--ku-red);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
-.title{font-size:20px;font-weight:700;color:var(--ku-red)}
-.subtitle{font-size:12px;color:var(--muted)}
-.chat{flex:1;overflow:auto;padding:20px;background:var(--bg);display:flex;flex-direction:column;gap:14px}
-.bubble-row{display:flex}.bubble-row.user{justify-content:flex-end}
-.bubble{max-width:75%;padding:13px 15px;border-radius:16px;line-height:1.55;white-space:pre-wrap}
-.bot{background:#fff;border:1px solid var(--border)}
-.user{background:var(--ku-red);color:#fff}
-.input-panel{background:#fff;border-top:1px solid var(--border);padding:16px}
-.input-row{display:flex;gap:10px}
-input{flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:999px}
-.btn{background:var(--ku-red);color:#fff;border:none;border-radius:999px;padding:12px 22px;cursor:pointer}
-.quick{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.quick button{background:#fff;color:#333;border:1px solid var(--border);padding:8px 12px;border-radius:999px;cursor:pointer}
-.info-panel{background:#fafafa;padding:24px;overflow:auto;border-left:1px solid var(--border)}
-.info-panel h2{color:var(--ku-red);margin-bottom:8px}
-.info-panel p{color:var(--muted);font-size:14px;margin-bottom:20px}
-.cards{display:flex;flex-direction:column;gap:12px}
-.card{text-decoration:none;color:inherit;background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;gap:14px;transition:.2s}
-.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.08)}
-.icon{width:46px;height:46px;border-radius:12px;background:var(--ku-red);display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px}
-.card strong{display:block}
-.card small{color:var(--muted)}
-hr{margin:22px 0;border:none;border-top:1px solid var(--border)}
-.features li{margin-left:18px;line-height:2}
-.footer{margin-top:24px;font-size:12px;color:#888}
+.header{
+ display:flex;
+ align-items:center;
+ gap:15px;
+ padding:18px 22px;
+ background:#fff;
+ border-bottom:1px solid var(--border);
+}
+.logo{
+ width:48px;
+ height:48px;
+ border-radius:50%;
+ background:var(--ku-red);
+ color:#fff;
+ font-weight:800;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+}
+.title{
+ font-size:20px;
+ font-weight:700;
+ color:var(--ku-red);
+}
+.subtitle{
+ font-size:12px;
+ color:var(--muted);
+}
+.chat{
+ flex:1;
+ overflow:auto;
+ padding:20px;
+ background:var(--bg);
+ display:flex;
+ flex-direction:column;
+ gap:14px;
+}
+.bubble-row{display:flex}
+.bubble-row.user{justify-content:flex-end}
+.bubble{
+ max-width:75%;
+ padding:13px 15px;
+ border-radius:16px;
+ line-height:1.55;
+ white-space:pre-wrap;
+}
+.bot{
+ background:#fff;
+ border:1px solid var(--border);
+}
+.user{
+ background:var(--ku-red);
+ color:#fff;
+}
+.input-panel{
+ background:#fff;
+ border-top:1px solid var(--border);
+ padding:16px;
+}
+.input-row{
+ display:flex;
+ gap:10px;
+}
+input{
+ flex:1;
+ padding:12px 16px;
+ border:1px solid var(--border);
+ border-radius:999px;
+}
+.btn{
+ background:var(--ku-red);
+ color:#fff;
+ border:none;
+ border-radius:999px;
+ padding:12px 22px;
+ cursor:pointer;
+}
+.btn:disabled{
+ opacity:.6;
+ cursor:not-allowed;
+}
+.quick{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+ margin-top:12px;
+}
+.quick button{
+ background:#fff;
+ color:#333;
+ border:1px solid var(--border);
+ padding:8px 12px;
+ border-radius:999px;
+ cursor:pointer;
+}
+.quick button:hover{
+ background:#f3f4f6;
+}
+.info-panel{
+ background:#fafafa;
+ padding:24px;
+ overflow:auto;
+ border-left:1px solid var(--border);
+}
+.info-panel h2{
+ color:var(--ku-red);
+ margin-bottom:8px;
+}
+.info-panel p{
+ color:var(--muted);
+ font-size:14px;
+ margin-bottom:20px;
+}
+.cards{
+ display:flex;
+ flex-direction:column;
+ gap:12px;
+}
+.card{
+ text-decoration:none;
+ color:inherit;
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:14px;
+ padding:14px;
+ display:flex;
+ gap:14px;
+ transition:.2s;
+}
+.card:hover{
+ transform:translateY(-2px);
+ box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+.icon{
+ width:46px;
+ height:46px;
+ border-radius:12px;
+ background:var(--ku-red);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ color:#fff;
+ font-size:22px;
+ flex-shrink:0;
+}
+.card strong{
+ display:block;
+}
+.card small{
+ color:var(--muted);
+}
+hr{
+ margin:22px 0;
+ border:none;
+ border-top:1px solid var(--border);
+}
+.info-panel h3{
+ color:var(--ku-red);
+ margin-bottom:10px;
+}
+.features li{
+ margin-left:18px;
+ line-height:2;
+}
+.footer{
+ margin-top:24px;
+ font-size:12px;
+ color:#888;
+}
+.support-box{
+ margin-top:20px;
+ padding:14px;
+ background:#fff;
+ border:1px solid var(--border);
+ border-radius:14px;
+}
+.support-box p{
+ margin:6px 0 0;
+ font-size:13px;
+ line-height:1.5;
+}
 @media(max-width:900px){
- .app{grid-template-columns:1fr;height:100vh;border-radius:0}
- .info-panel{display:none}
- body{padding:0}
+ body{
+  padding:0;
+  align-items:flex-start;
+ }
+ .app{
+  display:flex;
+  flex-direction:column;
+  height:auto;
+  min-height:100vh;
+  border-radius:0;
+ }
+ .chat-panel{
+  min-height:100vh;
+ }
+ .info-panel{
+  display:block;
+  border-left:none;
+  border-top:1px solid var(--border);
+ }
+ .bubble{
+  max-width:88%;
+ }
 }
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <div class="chat-panel">
+
 <div class="header">
 <div class="logo">KU</div>
 <div>
@@ -73,66 +267,109 @@ hr{margin:22px 0;border:none;border-top:1px solid var(--border)}
 <div class="bubble-row">
 <div class="bubble bot">👋 Welcome to KU ISC 2026!
 
-I'm your AI campus assistant.
+I'm your AI Campus Assistant.
 
-I can help you find campus buildings, classrooms and facilities.
+I can help you find:
+
+🏫 Campus Buildings
+📚 Libraries
+☕ Cafés
+🏛️ Lecture Halls
+🎓 Student Facilities
+
+Simply enter the building name or building number to get started.
 
 Try asking:
-• Where is the Central Library?
-• Where is Building 141?
-• Where is Hana Square?
-• How do I get to the Main Hall?</div>
+• Central Library
+• Building 141
+• Hana Square
+• Main Hall</div>
 </div>
 </div>
 
 <div class="input-panel">
 <form id="form" class="input-row">
-<input id="input" placeholder="Ask about a building or campus location..." autocomplete="off">
+<input id="input" placeholder="Ask about any building or campus location..." autocomplete="off">
 <button class="btn" id="sendBtn">Send</button>
 </form>
 
 <div class="quick">
 <button type="button">Central Library</button>
-<button type="button">Building 141</button>
 <button type="button">Hana Square</button>
 <button type="button">Main Hall</button>
+<button type="button">Building 141</button>
 <button type="button">Student Union</button>
+<button type="button">Science Library</button>
 </div>
 </div>
+
 </div>
 
 <aside class="info-panel">
+
 <h2>🎓 KU ISC Student Hub</h2>
-<p>Quick access to the most useful resources for KU ISC 2026 students.</p>
+<p>Quick access to useful resources for KU ISC 2026 students.</p>
 
 <div class="cards">
+
 <a class="card" href="https://summer.korea.ac.kr" target="_blank">
 <div class="icon">🌐</div>
-<div><strong>Official Website</strong><small>Program information & announcements</small></div>
+<div>
+<strong>Official Website</strong>
+<small>Program information & announcements</small>
+</div>
 </a>
 
 <a class="card" href="https://linktr.ee/kuisc.iwc" target="_blank">
 <div class="icon">🔗</div>
-<div><strong>Linktree</strong><small>Replace with your official Linktree URL</small></div>
+<div>
+<strong>Linktree</strong>
+<small>All official KU ISC resources</small>
+</div>
 </a>
 
 <a class="card" href="https://www.instagram.com/kuisc.iwc/" target="_blank">
 <div class="icon">📷</div>
-<div><strong>Instagram</strong><small>Replace with your official Instagram account</small></div>
+<div>
+<strong>Instagram</strong>
+<small>@kuisc.iwc</small>
+</div>
 </a>
+
+<a class="card" href="https://map.naver.com/" target="_blank">
+<div class="icon">📍</div>
+<div>
+<strong>Naver Map</strong>
+<small>Recommended for campus navigation</small>
+</div>
+</a>
+
 </div>
 
 <hr>
 
+<h3>Campus Assistant</h3>
+
 <ul class="features">
 <li>Campus Building Search</li>
-<li>Naver Map Navigation</li>
-<li>AI-powered Assistant</li>
+<li>Real-time Building Information</li>
+<li>AI-powered Navigation</li>
 <li>Designed for KU ISC 2026 Students</li>
 </ul>
 
-<div class="footer">Made by Team DJ (LSAI)</div>
+<div class="support-box">
+<h3>Need Help?</h3>
+<p>
+Visit the official KU ISC website or contact the program through Instagram.
+</p>
+</div>
+
+<div class="footer">
+Made by Team DJ (LSAI)
+</div>
+
 </aside>
+
 </div>
 
 <script>
@@ -147,10 +384,17 @@ function addMessage(role,text){
  row.className="bubble-row"+(role==="user"?" user":"");
  const bubble=document.createElement("div");
  bubble.className="bubble "+role;
+
  if(role==="bot"){
    const safe=text.replace(/</g,"&lt;").replace(/>/g,"&gt;");
-   bubble.innerHTML=safe.replace(/https?:\/\/\S+/g,u=>`<a href="${u}" target="_blank">${u}</a>`);
- }else bubble.textContent=text;
+   bubble.innerHTML=safe.replace(
+     /https?:\/\/\S+/g,
+     u=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`
+   );
+ }else{
+   bubble.textContent=text;
+ }
+
  row.appendChild(bubble);
  chat.appendChild(row);
  chat.scrollTop=chat.scrollHeight;
@@ -161,19 +405,31 @@ async function sendMessage(msg){
  addMessage("user",msg);
  input.value="";
  sendBtn.disabled=true;
+
  const loading=addMessage("bot","Thinking...");
+
  try{
    const res=await fetch(API_URL,{
      method:"POST",
      headers:{"Content-Type":"application/json"},
      body:JSON.stringify({message:msg})
    });
+
    const data=await res.json();
-   loading.innerHTML=(data.reply||"No response.")
-     .replace(/https?:\/\/\S+/g,u=>`<a href="${u}" target="_blank">${u}</a>`);
+
+   const safeReply=(data.reply||"No response.")
+     .replace(/</g,"&lt;")
+     .replace(/>/g,"&gt;");
+
+   loading.innerHTML=safeReply.replace(
+     /https?:\/\/\S+/g,
+     u=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`
+   );
+
  }catch{
    loading.textContent="Sorry, something went wrong. Please try again.";
  }
+
  sendBtn.disabled=false;
  chat.scrollTop=chat.scrollHeight;
 }
@@ -188,5 +444,6 @@ document.querySelectorAll(".quick button").forEach(b=>{
  b.onclick=()=>sendMessage(b.textContent);
 });
 </script>
+
 </body>
 </html>
