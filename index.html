@@ -16,9 +16,7 @@
 
 *{margin:0;padding:0;box-sizing:border-box}
 
-html,body{
- min-height:100%;
-}
+html,body{min-height:100%}
 
 body{
  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -136,9 +134,7 @@ body:before{
  word-break:break-all;
 }
 
-.user a{
- color:#fff;
-}
+.user a{color:#fff}
 
 .input-panel{
  flex-shrink:0;
@@ -184,13 +180,19 @@ input{
  background:#fff;
  color:#333;
  border:1px solid var(--border);
- padding:8px 12px;
+ padding:8px 13px;
  border-radius:999px;
  cursor:pointer;
+ font-size:14px;
+ display:flex;
+ align-items:center;
+ gap:6px;
+ transition:.2s;
 }
 
 .quick button:hover{
  background:#f3f4f6;
+ transform:translateY(-1px);
 }
 
 .info-panel{
@@ -289,9 +291,7 @@ hr{
 }
 
 @media(max-width:900px){
- body{
-  padding:0;
- }
+ body{padding:0}
 
  .app{
   display:flex;
@@ -311,9 +311,7 @@ hr{
   border-top:1px solid var(--border);
  }
 
- .bubble{
-  max-width:88%;
- }
+ .bubble{max-width:88%}
 }
 </style>
 </head>
@@ -345,13 +343,14 @@ I can help you find:
 📚 Libraries
 🚰 Water Purifiers
 
-Simply enter the building name or building number to get started.
+Simply enter the building name, building code, or category to get started.
 
 Try asking:
 • Central Library
-• 141(Enter Building Code Only)
-• Hana Square
-• Main Hall</div>
+• 141
+• Cafe
+• Cafeteria
+• Water Purifier</div>
 </div>
 </div>
 
@@ -362,12 +361,12 @@ Try asking:
 </form>
 
 <div class="quick">
-<button type="button">☕ Cafe</button>
-<button type="button">🍽️ Cafeteria</button>
-<button type="button">📚 Library</button>
-<button type="button">🚰 Water Purifier</button>
-<button type="button">141</button>
-<button type="button">Student Union</button>
+<button type="button" data-message="building">🏫 Building</button>
+<button type="button" data-message="cafe">☕ Cafe</button>
+<button type="button" data-message="cafeteria">🍽️ Cafeteria</button>
+<button type="button" data-message="library">📚 Library</button>
+<button type="button" data-message="water purifier">🚰 Water Purifier</button>
+</div>
 </div>
 
 </div>
@@ -419,16 +418,14 @@ Try asking:
 
 <ul class="features">
 <li>Campus Building Search</li>
-<li>Real-time Building Information</li>
-<li>AI-powered Navigation</li>
+<li>Cafe, Cafeteria, Library Search</li>
+<li>Water Purifier Location Search</li>
 <li>Designed for KU ISC 2026 Students</li>
 </ul>
 
 <div class="support-box">
 <h3>Need Help?</h3>
-<p>
-Visit the official KU ISC website or contact the program through Instagram.
-</p>
+<p>Visit the official KU ISC website or contact the program through Instagram.</p>
 </div>
 
 <div class="footer">
@@ -462,7 +459,12 @@ function scrollPageToBottom(){
 }
 
 function linkify(text){
- const safe=text.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+ const safe=text
+   .replace(/&/g,"&amp;")
+   .replace(/</g,"&lt;")
+   .replace(/>/g,"&gt;")
+   .replace(/"/g,"&quot;");
+
  return safe.replace(
    /https?:\/\/\S+/g,
    u=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${u}</a>`
@@ -495,10 +497,11 @@ function addMessage(role,text,forceScroll=true){
  return bubble;
 }
 
-async function sendMessage(msg){
- addMessage("user",msg,true);
+async function sendMessage(msg,displayText=msg){
+ addMessage("user",displayText,true);
  input.value="";
  sendBtn.disabled=true;
+ input.disabled=true;
 
  const loading=addMessage("bot","Thinking...",true);
 
@@ -509,6 +512,10 @@ async function sendMessage(msg){
      body:JSON.stringify({message:msg})
    });
 
+   if(!res.ok){
+     throw new Error("Server error");
+   }
+
    const data=await res.json();
    loading.innerHTML=linkify(data.reply||"No response.");
 
@@ -517,6 +524,7 @@ async function sendMessage(msg){
  }
 
  sendBtn.disabled=false;
+ input.disabled=false;
  scrollChatToBottom();
  scrollPageToBottom();
  input.focus();
@@ -529,7 +537,7 @@ form.addEventListener("submit",e=>{
 });
 
 document.querySelectorAll(".quick button").forEach(b=>{
- b.onclick=()=>sendMessage(b.textContent);
+ b.onclick=()=>sendMessage(b.dataset.message,b.textContent);
 });
 </script>
 
